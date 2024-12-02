@@ -1,46 +1,72 @@
 /// <reference types="cypress" />
 
 describe('Contact us tests', () => {
+  let messageBody
   beforeEach('Visit page', () => {
-    cy.visit('https://automationexercise.com/')
+    cy.fixture('example.json').then(($data) => {
+      messageBody = $data['message']
+    })
+    cy.visit('/')
   })
 
   it('Navigate to contact us form', () => {
-    cy.get('a[href="/login"]').should('be.visible').click()
-    cy.url().should('contain', 'login')
-    cy.get('[data-qa="login-email"]')
-      .should('be.visible')
-      .and('not.be.disabled')
-    cy.get('[data-qa="signup-name"]')
-      .should('be.visible')
-      .and('not.be.disabled')
-  })
+    // When
+    cy.get('a[href*="contact"]').should('be.visible').click()
 
-  it('Navigate to contact us', () => {
-    cy.get('a[href="/contact_us"]').should('be.visible').click()
+    // Then
     cy.url().should('contain', 'contact_us')
     cy.contains('h2', 'contact us', { matchCase: false }).should('be.visible')
-    cy.get('#contact-page').contains('h2', 'contact us', { matchCase: false })
     cy.get('div.bg').find('h2').contains('contact us', { matchCase: false })
-    cy.get('h2').first().should('be.visible') // contact us
-    cy.get('h2').eq(1).should('be.visible') // get in touch
+    cy.get('h2').first().should('be.visible') // Contact us element
+    cy.get('h2').eq(1).should('be.visible') // get in touch element
   })
 
-  it('Send message through contact s form', () => {
-    cy.get('a[href="/contact_us"]').should('be.visible').click()
+  it('Send message through contact us form', () => {
+    // When
+    cy.get('a[href*="contact"]').should('be.visible').click()
+
+    // Then
     cy.url().should('contain', 'contact_us')
-    cy.get('[data-qa="name"]').should('be.visible').clear().type('Dina')
-    cy.get('[data-qa="email"]').clear().type('dina.kavaz4@gmail.com')
+
+    // When
+    cy.get('[data-qa="name"]').should('be.visible').clear().type('Aid')
+    cy.get('[data-qa="email"]').clear().type('aid@example.com')
     cy.get('[data-qa="subject"]').clear().type('Something')
-    cy.get('[data-qa="message"]').clear().type('message')
+    cy.get('[data-qa="message"]').clear().type(messageBody)
 
+    // And
     cy.get('[data-qa="submit-button"]').should('be.enabled').click()
-    cy.get('.alert-success').should('be.visible')
 
+    // Then
     cy.get('.alert-success').contains(
       'Success! Your details have been submitted successfully.',
       { matchCase: false }
     )
   })
-})
 
+  it('Send message through contact us form without email insterted', () => {
+    // When
+    cy.get('a[href*="contact"]').should('be.visible').click()
+
+    // Then
+    cy.url().should('contain', 'contact_us')
+
+    // When
+    cy.get('[data-qa="name"]').should('be.visible').clear().type('Aid')
+    cy.get('[data-qa="subject"]').clear().type('Something')
+    cy.get('[data-qa="message"]').clear().type('Message')
+
+    // And
+    cy.get('[data-qa="submit-button"]').should('be.enabled').click()
+
+    // Then
+    cy.get('[data-qa="email"]')
+      .invoke('prop', 'validationMessage')
+      .should('eq', 'Please fill out this field.')
+
+    cy.get('input:invalid')
+      .should('be.visible')
+      .invoke('prop', 'validationMessage')
+      .should('eq', 'Please fill out this field.')
+  })
+})
