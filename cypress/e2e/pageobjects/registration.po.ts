@@ -4,6 +4,7 @@ export class RegistrationPage extends Page {
   constructor() {
     super(`login`, cy)
   }
+<<<<<<< HEAD
 
   populateEmailandName = (values: { email: string; name: string }) => {
     this.nameInputRegistration.clear().type(values.name)
@@ -244,4 +245,6 @@ export class RegistrationPage extends Page {
   get accountCreatedMessage() {
     return cy.get('[data-qa="account-created"]')
   }
+=======
+>>>>>>> cb3ddbef1e472494fdd050be41faa56da9bb876a
 }

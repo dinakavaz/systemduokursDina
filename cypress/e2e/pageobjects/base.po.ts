@@ -16,11 +16,16 @@ export class Page extends CypressPageObject {
     this.url = url
   }
 
+<<<<<<< HEAD
   public getNavigation() {
+=======
+  /*public getNavigation() {
+>>>>>>> cb3ddbef1e472494fdd050be41faa56da9bb876a
     if (this.navigation == undefined) {
       this.navigation = new Navigation(this.url)
     }
     return this.navigation
+<<<<<<< HEAD
   }
 
   public shouldToastBe(options: {
@@ -42,4 +47,7 @@ export class Page extends CypressPageObject {
         this.cy.get('.toast-error').should('contain.text', options.withText)
     }
   }
+=======
+  }*/
+>>>>>>> cb3ddbef1e472494fdd050be41faa56da9bb876a
 }

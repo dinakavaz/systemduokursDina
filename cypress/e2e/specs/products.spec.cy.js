@@ -1,6 +1,10 @@
 describe('Product tests', () => {
   beforeEach(() => {
+<<<<<<< HEAD
     cy.visit('/')
+=======
+    cy.visit('https://automationexercise.com/')
+>>>>>>> cb3ddbef1e472494fdd050be41faa56da9bb876a
   })
 
   it('Find products on page', () => {
